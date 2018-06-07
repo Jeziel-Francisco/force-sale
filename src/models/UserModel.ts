@@ -7,6 +7,7 @@ import { IDbConnection } from "../interfaces/DbConnectionInterfaces";
 
 export interface IUserAttibutes {
     id?: number;
+    email: string;
     companyId?: number;
     password?: string;
     createdAt?: string;
@@ -28,16 +29,10 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
             allowNull: false
         },
         password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: true,
-                min: 6,
-                max: 128
-            }
+            type: DataTypes.STRING
         },
-        companyId: {
-            type: DataTypes.INTEGER
+        email: {
+            type: DataTypes.STRING
         }
     }, {
             tableName: 'users',
@@ -55,12 +50,6 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
                 }
             }
         });
-
-    User.associate = (db: IDbConnection) => {
-        db.User.belongsTo(db.Company, {
-            foreignKey: 'companyId'
-        });
-    }
 
     User.prototype.isPassword = (encodedPassword: string, password: string): Boolean => {
         return compareSync(password, encodedPassword);

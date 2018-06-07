@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as morgan from 'morgan';
-import { UserRoutes, CompanyRoutes } from './routes/routes';
+import { UserRoutes } from './routes/routes';
 
 
 
@@ -19,7 +19,6 @@ class App {
 
     routes(express: express.Application) {
         UserRoutes(express);
-        CompanyRoutes(express);
     }
 }
 

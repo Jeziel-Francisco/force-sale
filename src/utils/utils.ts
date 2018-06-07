@@ -1,4 +1,8 @@
+import * as httpStatus from 'http-status';
+
+import { Response } from "express";
 import { Server } from "http";
+
 
 export const normalizePort = (val: number | string): number | string | boolean => {
     let port: number = (typeof val === 'string') ? parseInt(val) : val;
@@ -7,7 +11,7 @@ export const normalizePort = (val: number | string): number | string | boolean =
     else return false;
 }
 
-export const onError = (server: Server) => {
+export const onErrorServer = (server: Server) => {
     return (error: NodeJS.ErrnoException): void => {
         let port: number | string = server.address().port;
         if (error.syscall !== 'listen') throw error;
@@ -44,5 +48,15 @@ export const handleError = (error: Error) => {
 
     return Promise.reject(new Error(errorMessage));
 }
+
+export const onErrorResponse = (res: Response, error: any) => {
+    let errorMessage: string = `${error.name || 'error'}:${error.message || error}`;
+
+    res.status(httpStatus.BAD_REQUEST).json(errorMessage);
+};
+
+export const onSuccessResponse = (res: Response, data: any) => {
+    res.status(httpStatus.OK).json({ payload: data });
+};
 
 export const JWT_SECRET: string = process.env.JWT_SECRET;
